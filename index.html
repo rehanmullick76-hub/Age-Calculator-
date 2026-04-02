@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Precision Age Calculator | Years, Months, Days, Hours, Minutes</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: linear-gradient(145deg, #e0eafc 0%, #cfdef3 100%);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* main card */
+    .calculator-card {
+      max-width: 620px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(0px);
+      border-radius: 48px;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 2rem 2rem 2.5rem;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 0.25rem 0;
+      background: linear-gradient(135deg, #1A2A4F, #2C3E66);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
+
+    .subhead {
+      color: #4a627a;
+      border-bottom: 2px solid #cbdde9;
+      display: inline-block;
+      padding-bottom: 6px;
+      margin-bottom: 1.8rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    /* input groups */
+    .input-group {
+      text-align: left;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      color: #1e2f47;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    .input-group label i {
+      font-style: normal;
+      font-size: 1.2rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 1rem;
+      border: 2px solid #e2edf2;
+      border-radius: 36px;
+      background: white;
+      transition: 0.2s;
+      font-family: inherit;
+      outline: none;
+      color: #0a1c2f;
+      font-weight: 500;
+    }
+
+    input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+    }
+
+    .inline-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .inline-row .input-group {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    button {
+      background: #1f3a5f;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 14px 24px;
+      border-radius: 48px;
+      width: 100%;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 12px;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: 0.3px;
+    }
+
+    button:hover {
+      background: #0e2a48;
+      transform: scale(0.98);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .result-card {
+      background: #f0f6fe;
+      border-radius: 36px;
+      padding: 1.2rem 1.5rem;
+      margin-top: 28px;
+      text-align: center;
+      border: 1px solid #d4e2f0;
+      transition: 0.1s;
+    }
+
+    .result {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #0b2b44;
+      word-break: break-word;
+      line-height: 1.4;
+      letter-spacing: -0.2px;
+    }
+
+    .result-detail {
+      font-size: 0.9rem;
+      color: #2c577c;
+      margin-top: 12px;
+      border-top: 1px dashed #bdd4e8;
+      padding-top: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: #ffffffcc;
+      border-radius: 80px;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #1f4a76;
+    }
+
+    .error-message {
+      color: #c7254e;
+      background: #ffeef3;
+      border-radius: 48px;
+      padding: 12px;
+      margin-top: 18px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      border-left: 4px solid #c7254e;
+    }
+
+    footer {
+      font-size: 0.7rem;
+      text-align: center;
+      color: #6f8fae;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 550px) {
+      .calculator-card {
+        padding: 1.5rem;
+      }
+      .result {
+        font-size: 1.2rem;
+      }
+      input, button {
+        padding: 12px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="calculator-card">
+  <h2>✨ Precision Age Clock</h2>
+  <div class="subhead">Years · Months · Days · Hours · Minutes</div>
+
+  <div class="input-group">
+    <label>📅 Date of birth</label>
+    <input type="date" id="dob" value="2000-06-15">
+  </div>
+
+  <div class="inline-row">
+    <div class="input-group">
+      <label>🕒 Hour (0–23)</label>
+      <input type="number" id="hour" placeholder="Hour" value="12" min="0" max="23" step="1">
+    </div>
+    <div class="input-group">
+      <label>⏱️ Minute (0–59)</label>
+      <input type="number" id="minute" placeholder="Minute" value="0" min="0" max="59" step="1">
+    </div>
+  </div>
+
+  <button onclick="calculateAge()">
+    ⚡ Calculate exact age
+  </button>
+
+  <div id="resultContainer" class="result-card" style="display: none;">
+    <div class="result" id="result"></div>
+    <div class="result-detail" id="extraDetail"></div>
+  </div>
+  
+  <div id="errorBox" class="error-message" style="display: none;"></div>
+  <footer>Accurate to the minute · respects timezone local</footer>
+</div>
+
+<script>
+  (function() {
+    // DOM elements
+    const dobInput = document.getElementById("dob");
+    const hourInput = document.getElementById("hour");
+    const minuteInput = document.getElementById("minute");
+    const resultDiv = document.getElementById("result");
+    const extraDetailSpan = document.getElementById("extraDetail");
+    const resultContainer = document.getElementById("resultContainer");
+    const errorBox = document.getElementById("errorBox");
+
+    // Helper: show error & hide result card
+    function showError(message) {
+      errorBox.style.display = "block";
+      errorBox.innerText = message;
+      resultContainer.style.display = "none";
+    }
+
+    function hideError() {
+      errorBox.style.display = "none";
+    }
+
+    function displayAge(ageObj) {
+      // ageObj: { years, months, days, hours, minutes, totalDaysAlive, totalHoursAlive }
+      const { years, months, days, hours, minutes, totalDaysAlive, totalHoursAlive, totalMinutesAlive } = ageObj;
+      
+      // main result string
+      let mainText = "";
+      if (years === 0 && months === 0 && days === 0 && hours === 0 && minutes === 0) {
+        mainText = `🎉 Just born! 0 minutes old`;
+      } else {
+        const parts = [];
+        if (years > 0) parts.push(`${years} ${years === 1 ? 'Year' : 'Years'}`);
+        if (months > 0) parts.push(`${months} ${months === 1 ? 'Month' : 'Months'}`);
+        if (days > 0) parts.push(`${days} ${days === 1 ? 'Day' : 'Days'}`);
+        if (hours > 0) parts.push(`${hours} ${hours === 1 ? 'Hour' : 'Hours'}`);
+        if (minutes > 0) parts.push(`${minutes} ${minutes === 1 ? 'Minute' : 'Minutes'}`);
+        mainText = parts.join(', ');
+      }
+      
+      resultDiv.innerHTML = mainText;
+      
+      // Additional precision details
+      extraDetailSpan.innerHTML = `
+        <span class="badge">📆 ${totalDaysAlive.toLocaleString()} days alive</span>
+        <span class="badge">⏲️ ${totalHoursAlive.toLocaleString()} hours</span>
+        <span class="badge">⌛ ${totalMinutesAlive.toLocaleString()} minutes</span>
+      `;
+      resultContainer.style.display = "block";
+    }
+
+    // Core age calculation logic with precise year/month/day/hour/minute difference
+    function computePreciseAge(birthDate, currentDate) {
+      // birthDate and currentDate are Date objects (local)
+      // We need to extract components carefully.
+      let years = currentDate.getFullYear() - birthDate.getFullYear();
+      let months = currentDate.getMonth() - birthDate.getMonth();
+      let days = currentDate.getDate() - birthDate.getDate();
+      let hours = currentDate.getHours() - birthDate.getHours();
+      let minutes = currentDate.getMinutes() - birthDate.getMinutes();
+
+      // Normalize minutes -> hours, hours -> days, days -> months, months -> years
+      if (minutes < 0) {
+        minutes += 60;
+        hours--;
+      }
+      
+      if (hours < 0) {
+        hours += 24;
+        days--;
+      }
+      
+      // Day adjustment: need to handle month boundaries
+      if (days < 0) {
+        // get last day of previous month relative to currentDate
+        const previousMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+        const daysInPrevMonth = previousMonthDate.getDate();
+        days += daysInPrevMonth;
+        months--;
+      }
+      
+      if (months < 0) {
+        months += 12;
+        years--;
+      }
+      
+      // Edge case: if after adjustments we have negative years (should never happen if birth <= now, but double-check)
+      if (years < 0) {
+        years = 0;
+        months = 0;
+        days = 0;
+        hours = 0;
+        minutes = 0;
+      }
+      
+      // total absolute units (for extra stats)
+      const totalMinutesAlive = Math.floor((currentDate - birthDate) / (1000 * 60));
+      const totalHoursAlive = Math.floor(totalMinutesAlive / 60);
+      const totalDaysAlive = Math.floor(totalHoursAlive / 24);
+      
+      return {
+        years,
+        months,
+        days,
+        hours,
+        minutes,
+        totalDaysAlive,
+        totalHoursAlive,
+        totalMinutesAlive: totalMinutesAlive < 0 ? 0 : totalMinutesAlive
+      };
+    }
+
+    // main calculate function
+    window.calculateAge = function() {
+      hideError();
+      
+      // 1. get date of birth string
+      const dobString = dobInput.value;
+      if (!dobString) {
+        showError("❌ Please select your date of birth.");
+        return;
+      }
+      
+      // 2. get hour & minute values
+      let hourRaw = hourInput.value.trim();
+      let minuteRaw = minuteInput.value.trim();
+      
+      let hour = 0;
+      let minute = 0;
+      
+      if (hourRaw !== "") {
+        hour = parseInt(hourRaw, 10);
+        if (isNaN(hour)) hour = 0;
+      }
+      if (minuteRaw !== "") {
+        minute = parseInt(minuteRaw, 10);
+        if (isNaN(minute)) minute = 0;
+      }
+      
+      // validation: hour between 0-23, minute 0-59
+      if (hour < 0 || hour > 23) {
+        showError("⛔ Hour must be between 0 and 23.");
+        return;
+      }
+      if (minute < 0 || minute > 59) {
+        showError("⛔ Minute must be between 0 and 59.");
+        return;
+      }
+      
+      // 3. build birth date object (local time)
+      const birthDate = new Date(dobString);
+      // Check if dobString leads to valid date
+      if (isNaN(birthDate.getTime())) {
+        showError("⚠️ Invalid date format. Please use the date picker.");
+        return;
+      }
+      
+      // Set the precise time (hour/minute) to the birth date
+      birthDate.setHours(hour, minute, 0, 0);
+      
+      // 4. current date & time (local now)
+      const now = new Date();
+      
+      // 5. Future date validation
+      if (birthDate > now) {
+        showError("🔮 Future date/time is not allowed. Birth cannot be in the future.");
+        return;
+      }
+      
+      // 6. Edge: if birthdate is exactly same as now (down to minute)
+      // computePreciseAge will handle gracefully.
+      
+      // 7. Compute the age components
+      const age = computePreciseAge(birthDate, now);
+      
+      // 8. Special validation: if total minutes negative (fallback)
+      if (age.totalMinutesAlive < 0) {
+        showError("Unexpected error: birth date is after current moment. Please check.");
+        return;
+      }
+      
+      // 9. display result
+      displayAge(age);
+    };
+    
+    // Optional: set default example values for better UX (already pre-filled)
+    // If dob is empty set a reasonable default, but we already preset "2000-06-15"
+    if (!dobInput.value) {
+      // fallback: set to 2000-01-01
+      dobInput.value = "2000-01-01";
+    }
+    
+    // allow pressing Enter key to trigger calculate (optional)
+    const inputs = [dobInput, hourInput, minuteInput];
+    inputs.forEach(inp => {
+      inp.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          calculateAge();
+        }
+      });
+    });
+    
+    // initial auto-run: show age for default values on page load (optional)
+    // gives immediate feedback without needing button click.
+    setTimeout(() => {
+      // ensure DOM fully parsed, then compute default demo age
+      if (dobInput.value && !errorBox.style.display === 'block') {
+        calculateAge();
+      }
+    }, 50);
+  })();
+</script>
+</body>
+</html>
